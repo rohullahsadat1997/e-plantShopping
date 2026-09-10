@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import "./App.css";
 import ProductList from "./components/ProductList";
@@ -5,6 +6,8 @@ import AboutUs from "./components/AboutUs";
 import CartItem from "./components/CartItem";
 
 function Home() {
+  const [showProducts, setShowProducts] = useState(false);
+
   return (
     <main className="app">
       <section className="hero">
@@ -22,13 +25,16 @@ function Home() {
             a greener, happier space.
           </p>
 
-          <Link to="/plants">
-            <button className="get-started">
-              Get Started
-            </button>
-          </Link>
+          <button
+            className="get-started"
+            onClick={() => setShowProducts(true)}
+          >
+            Get Started
+          </button>
         </div>
       </section>
+
+      {showProducts && <ProductList />}
     </main>
   );
 }
@@ -39,8 +45,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/plants" element={<ProductList />} />
-        <Route path="/about" element={<AboutUs />} />
         <Route path="/cart" element={<CartItem />} />
+        <Route path="/about" element={<AboutUs />} />
       </Routes>
     </BrowserRouter>
   );

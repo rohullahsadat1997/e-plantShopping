@@ -1,8 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
-import { addToCart } from "./CartSlice";
+import { addItem } from "./CartSlice";
 import { Link } from "react-router-dom";
 import products from "./products";
-
 function ProductList() {
   const dispatch = useDispatch();
 
@@ -71,15 +70,13 @@ function ProductList() {
                     <p>${product.price}</p>
 
                     <button
-                      onClick={() =>
-                        dispatch(addToCart(product))
-                      }
-                      disabled={isInCart(product.id)}
-                    >
-                      {isInCart(product.id)
-                        ? "Added to Cart"
-                        : "Add to Cart"}
-                    </button>
+  onClick={() => dispatch(addItem(product))}
+  disabled={isInCart(product.id)}
+>
+  {isInCart(product.id)
+    ? "Added to Cart"
+    : "Add to Cart"}
+</button>
                   </article>
                 ))}
               </div>

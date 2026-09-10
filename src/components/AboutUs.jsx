@@ -1,7 +1,7 @@
 function AboutUs() {
   return (
     <section className="about-us">
-      <div className="about-content">
+      <div className="about-us-container">
         <p className="about-subtitle">ABOUT US</p>
 
         <h2>Paradise Nursery</h2>

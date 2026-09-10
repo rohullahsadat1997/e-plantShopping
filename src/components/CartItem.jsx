@@ -1,8 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import {
-  removeFromCart,
-  increaseQuantity,
-  decreaseQuantity,
+  removeItem,
+  updateQuantity,
 } from "./CartSlice";
 import { Link } from "react-router-dom";
 
@@ -15,6 +14,15 @@ function CartItem() {
     (total, item) => total + item.price * item.quantity,
     0
   );
+
+  const handleQuantityChange = (id, quantity) => {
+    dispatch(
+      updateQuantity({
+        id,
+        quantity,
+      })
+    );
+  };
 
   if (cartItems.length === 0) {
     return (
@@ -44,6 +52,7 @@ function CartItem() {
     <div className="cart-page">
       <nav className="navbar">
         <Link to="/">Home</Link>
+
         <Link to="/plants">Plants</Link>
 
         <Link to="/cart">
@@ -59,58 +68,66 @@ function CartItem() {
       <main className="cart-container">
         <h1>Your Shopping Cart</h1>
 
-        <section className="cart-items">
-          {cartItems.map((item) => (
-            <article className="cart-item" key={item.id}>
-              <img
-                src={item.image}
-                alt={item.name}
-              />
+        {cartItems.map((item) => (
+          <article
+            className="cart-item"
+            key={item.id}
+          >
+            <img
+              src={item.image}
+              alt={item.name}
+            />
 
-              <div className="cart-item-info">
-                <h2>{item.name}</h2>
+            <div className="cart-item-info">
+              <h2>{item.name}</h2>
 
-                <p>
-                  Unit Price: ${item.price}
-                </p>
+              <p>
+                Unit Price: ${item.price}
+              </p>
 
-                <p>
-                  Total: $
-                  {(item.price * item.quantity).toFixed(2)}
-                </p>
+              <p>
+                Total: $
+                {(item.price * item.quantity).toFixed(2)}
+              </p>
 
-                <div className="quantity-controls">
-                  <button
-                    onClick={() =>
-                      dispatch(decreaseQuantity(item.id))
-                    }
-                  >
-                    −
-                  </button>
+              <div className="quantity-controls">
+                <button
+                  onClick={() =>
+                    handleQuantityChange(
+                      item.id,
+                      item.quantity - 1
+                    )
+                  }
+                  disabled={item.quantity <= 1}
+                >
+                  −
+                </button>
 
-                  <span>{item.quantity}</span>
-
-                  <button
-                    onClick={() =>
-                      dispatch(increaseQuantity(item.id))
-                    }
-                  >
-                    +
-                  </button>
-                </div>
+                <span>{item.quantity}</span>
 
                 <button
-                  className="remove-button"
                   onClick={() =>
-                    dispatch(removeFromCart(item.id))
+                    handleQuantityChange(
+                      item.id,
+                      item.quantity + 1
+                    )
                   }
                 >
-                  Delete
+                  +
                 </button>
               </div>
-            </article>
-          ))}
-        </section>
+
+              <button
+                className="remove-button"
+                onClick={() =>
+                  dispatch(removeItem(item.id))
+                }
+              >
+                Delete
+              </button>
+            </div>
+          </article>
+        ))}
 
         <section className="cart-summary">
           <h2>
